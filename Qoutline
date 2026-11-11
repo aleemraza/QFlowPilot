@@ -1,0 +1,130 @@
+QFlowPilot/
+│
+├── qflowpilot/
+│   ├── __init__.py
+│   │
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── interfaces.py
+│   │   ├── config.py
+│   │   ├── exceptions.py
+│   │   └── orchestrator.py
+│   │
+│   ├── workload/
+│   │   ├── __init__.py
+│   │   ├── workload_interface.py
+│   │   ├── circuit_builder.py
+│   │   ├── workload_classifier.py
+│   │   ├── workload_analyzer.py
+│   │   └── dependency_manager.py
+│   │
+│   ├── profiler/
+│   │   ├── __init__.py
+│   │   ├── circuit_profiler.py
+│   │   ├── quality_profiler.py
+│   │   ├── latency_profiler.py
+│   │   ├── cost_estimator.py
+│   │   └── resource_profiler.py
+        |-- transpilation_profiler.py
+│   │
+│   ├── adapters/
+│   │   ├── __init__.py
+│   │   ├── base_adapter.py
+│   │   ├── aer_ideal_adapter.py
+│   │   ├── aer_noisy_adapter.py
+│   │   ├── ibm_adapter.py
+│   │   └── classical_adapter.py
+│   │
+│   ├── policy/
+│   │   ├── __init__.py
+│   │   ├── runtime_policy.py
+│   │   ├── fixed_shot_policy.py
+│   │   ├── adaptive_shot_policy.py
+│   │   ├── quality_aware_policy.py
+│   │   └── fallback_policy.py
+│   │
+│   ├── runtime/
+│   │   ├── __init__.py
+│   │   ├── execution_engine.py
+│   │   ├── workflow_manager.py
+│   │   ├── execution_controller.py
+│   │   └── resource_manager.py
+│   │
+│   ├── validator/
+│   │   ├── __init__.py
+│   │   ├── result_validator.py
+│   │   ├── statistical_validator.py
+│   │   └── application_validator.py
+│   │
+│   └── logger/
+│       ├── __init__.py
+│       ├── experiment_logger.py
+│       ├── metrics_collector.py
+│       └── decision_logger.py
+│
+├── workloads/
+│   ├── __init__.py
+│   │
+│   ├── qaoa_maxcut/
+│   │   ├── __init__.py
+│   │   ├── problem.py
+│   │   ├── circuit.py
+│   │   └── evaluation.py
+│   │
+│   ├── vqe/
+│   │   ├── __init__.py
+│   │   ├── problem.py
+│   │   ├── circuit.py
+│   │   └── evaluation.py
+│   │
+│   └── localization/
+│       ├── __init__.py
+│       ├── dataset_loader.py
+│       ├── problem.py
+│       ├── quantum_circuit.py
+│       └── evaluation.py
+│
+├── experiments/
+│   ├── configs/
+│   │   ├── ideal_simulation.yaml
+│   │   ├── noisy_simulation.yaml
+│   │   ├── ibm_qpu.yaml
+│   │   └── experiment_default.yaml
+│   │
+│   ├── results/
+│   │   └── .gitkeep
+│   │
+│   └── logs/
+│       └── .gitkeep
+│
+├── datasets/
+│   └── localization/
+│       ├── raw/
+│       └── processed/
+│
+├── examples/
+│   ├── run_ideal_simulation.py
+│   ├── run_noisy_simulation.py
+│   ├── run_ibm_qpu.py
+│   ├── run_qaoa.py
+│   └── run_localization.py
+│
+├── tests/
+│   ├── test_workload.py
+│   ├── test_profiler.py
+│   ├── test_adapters.py
+│   ├── test_policies.py
+│   ├── test_runtime.py
+│   ├── test_validator.py
+│   └── test_integration.py
+│
+├── scripts/
+│   ├── run_experiment.py
+│   └── compare_results.py
+│
+├── .env.example
+├── .gitignore
+├── requirements.txt
+├── pyproject.toml
+└── README.md

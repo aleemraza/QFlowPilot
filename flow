@@ -1,0 +1,128 @@
+Stage 1 — Core foundation
+Start here
+core/models.py, interfaces.py, config.py, exceptions.py, orchestrator.py
+
+Define the data structures, interfaces, configuration and central coordination.
+
+
+
+Stage 2 — Quantum execution adapter
+
+adapters/base_adapter.py, adapters/aer_ideal_adapter.py
+
+Connect QFlowPilot to Qiskit Aer and execute a quantum circuit locally.
+
+
+
+Stage 3 — First workload: QAOA Max-Cut
+
+workloads/qaoa_maxcut/problem.py, circuit.py, evaluation.py
+
+Create a real QAOA workload, execute it and evaluate its result.
+
+
+
+Stage 4 — Workload analysis
+
+workload/workload_interface.py, circuit_builder.py, workload_classifier.py, workload_analyzer.py, dependency_manager.py
+
+Make QFlowPilot understand the workload before execution.
+
+
+
+Stage 5 — Profiling
+
+profiler/circuit_profiler.py, quality_profiler.py, latency_profiler.py, cost_estimator.py, resource_profiler.py
+
+Measure circuit characteristics, output quality, execution time and estimated cost.
+
+
+
+Stage 6 — Validation and logging
+
+validator/ and logger/
+
+Check whether results satisfy statistical and application-level quality requirements, and record measurements.
+
+
+
+Stage 7 — Runtime policies
+
+policy/fixed_shot_policy.py, adaptive_shot_policy.py, quality_aware_policy.py, fallback_policy.py
+
+Introduce intelligent decisions after profiling and validation work correctly.
+
+
+
+Stage 8 — Runtime orchestration
+
+runtime/ and core/orchestrator.py integration
+
+Coordinate workloads, policies, execution, validation and resource management.
+
+
+
+Stage 9 — Noisy and real quantum backends
+
+adapters/aer_noisy_adapter.py, ibm_adapter.py, classical_adapter.py
+
+Expand from ideal local execution to hardware-inspired noisy simulation, real IBM QPU execution when available, and classical fallback.
+
+
+
+Stage 10 — Other workloads and experiments
+
+Add VQE, localization, experiment configurations, evaluation scripts and tests.
+
+2. When is QFlowPilot actually working?
+I suggest defining five milestones. Each milestone must pass its tests before moving forward.
+Milestone 1 — Basic execution
+First target
+
+After Stages 1–3
+
+QFlowPilot can:
+- Accept a QAOA Max-Cut workload.
+- Build a quantum circuit.
+- Execute it using Qiskit Aer.
+- Receive measurement counts.
+- Evaluate the solution.
+Success condition: A complete circuit-to-result execution works without manually running each component.
+
+Milestone 2 — Measurement and quality analysis
+
+After Stages 4–6
+
+QFlowPilot can:
+- Analyze circuit characteristics.
+- Calculate measurement statistics and uncertainty.
+- Evaluate application-level quality.
+- Record execution time and resource estimates.
+Success condition: Every execution produces a result with quality, statistical and performance measurements.
+
+Milestone 3 — Quality-aware decisions
+
+After Stage 7
+
+QFlowPilot can:
+- Select a shot budget.
+- Request additional shots when necessary.
+- Compare quality against a target.
+- Decide whether to continue or use classical fallback.
+Success condition: Fixed-shot and adaptive policies execute correctly and their decisions are recorded.
+
+Milestone 4 — Complete runtime
+
+After Stages 8–9
+
+QFlowPilot can coordinate the workload, profiler, policy, execution adapter and validator.
+
+Success condition: One command runs the complete workflow, with ideal Aer, noisy Aer and eventually a real IBM QPU adapter.
+
+Milestone 5 — Research-ready system
+
+After Stage 10
+
+QFlowPilot can run repeatable experiments and compare policies across workloads.
+
+Success condition: It generates reproducible CSV/JSON results and supports all six planned experiments.

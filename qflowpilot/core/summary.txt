@@ -1,0 +1,133 @@
+QFlowPilot – Core Module Development Summary
+Core foundation completed
+ Next: Backend adapters
+
+
+Before developing adapters/base_adapter.py, let's document what we have built in the QFlowPilot core/ package, why each module exists, how the modules interact, and what responsibilities belong to the next development stage.
+1. Purpose of the core package
+The core/ package provides the fundamental architecture of QFlowPilot.
+
+Its purpose is to define:
+- The data structures used throughout the system.
+- The interfaces that individual components must implement.
+- The configuration used to control execution.
+- The exception hierarchy for consistent error handling.
+- The orchestrator responsible for coordinating the execution workflow.
+The core package should remain independent of specific quantum backend implementations such as Qiskit Aer or IBM Quantum.
+2. Completed core modules
+1. models.py
+Implemented
+
+Purpose: Defines the common data structures and execution states.
+
+Main components:
+Component	Responsibility
+WorkloadType	Batch, iterative, application
+ExecutionMode	Ideal, noisy, hardware, classical
+ExecutionStatus	Pending, submitted, running, completed, failed, cancelled
+RuntimeAction	Accept, more shots, retry, fallback, wait, reject, terminate
+WorkloadSpec	Describes a workload
+CircuitProfile	Stores circuit characteristics
+ExecutionRequest	Defines an execution request
+ExecutionResult	Stores backend execution results
+QualityEstimate	Stores quality measurements
+RuntimeDecision	Stores policy decisions
+
+
+2. interfaces.py
+Implemented
+
+Purpose: Defines abstract interfaces that components must follow.
+- QuantumBackendInterface
+- WorkloadInterface
+- ProfilerInterface
+- PolicyInterface
+- ValidatorInterface
+These interfaces allow us to replace implementations without changing the entire framework.
+
+3. config.py
+Implemented
+
+Purpose: Centralizes configuration settings.
+Configuration	Main settings
+ShotConfig	Initial, minimum, maximum and additional shots
+QualityConfig	Confidence level, quality thresholds, standard error
+BackendConfig	Backend mode, backend name, transpilation
+RuntimeConfig	Timeout, retries, seed, metrics
+QFlowPilotConfig	Combines all configurations
+
+Supports dictionary and YAML configuration loading and saving.
+
+4. exceptions.py
+Implemented
+
+Purpose: Provides a consistent exception hierarchy.
+
+Main exceptions:
+- QFlowPilotError
+- BackendError
+- BackendUnavailableError
+- BackendExecutionError
+- InvalidWorkloadError
+- UnsupportedWorkloadError
+- ExecutionTimeoutError
+- QualityViolationError
+- RuntimeExecutionError
+This allows the runtime to distinguish technical failures from application-quality problems.
+
+5. orchestrator.py
+Implemented
+
+Purpose: Coordinates the complete execution workflow.
+
+Main class: QFlowPilotOrchestrator
+
+It connects workload preparation, circuit profiling, backend execution, quality estimation, runtime policy decisions and result validation.
+
+Its output is OrchestrationResult, containing:
+- Workload ID
+- Final execution result
+- Quality estimate
+- Circuit profile
+- Runtime decision history
+- Total execution attempts
+
+3. How the core modules work together
+The following diagram shows the conceptual architecture.
+QFlowPilotOrchestrator
+
+Central execution coordinator
+
+Workload Interface
+
+Workload specification and circuit
+
+
+Backend Interface
+
+Circuit execution
+
+
+Profiler Interface
+
+Circuit and quality profiling
+
+
+Policy Interface
+
+Runtime decisions
+
+
+Validator Interface
+
+Execution and quality validation
+
+
+
+
+Shared foundation
+
+models.py · config.py · exceptions.py
+
+
+The orchestrator uses the interfaces to communicate with components. The models carry information between them, the configuration controls their behavior, and exceptions communicate failures.

@@ -1,0 +1,130 @@
+Profiler	Responsibility
+CircuitProfiler	Profile each individual circuit
+WorkloadProfiler	Identify batch or iterative structure and aggregate circuit profiles
+TranspilationProfiler	Analyze circuit transformation for a target backend
+QualityProfiler	Analyze measurement and application quality
+LatencyProfiler	Measure workload and execution latency
+CostEstimator	Estimate workload execution cost
+ResourceProfiler	Estimate workload resource requirements
+
+profiler/
+    ├── __init__.py
+    ├── circuit_profiler.py
+    ├── workload_profiler.py       # New
+    ├── transpilation_profiler.py
+    ├── quality_profiler.py
+    ├── latency_profiler.py
+    ├── cost_estimator.py
+    └── resource_profiler.py
+
+
+
+    ResourceProfiler — Module Summary
+Seventh profiler module
+ Seven-module architecture complete
+
+
+The ResourceProfiler is responsible for estimating the quantum and classical resources required by a workload and checking whether those requirements fit within configured resource limits.
+
+Main research question:
+
+How can QFlowPilot estimate workload resource requirements and determine whether those requirements satisfy available resource constraints?
+A. Main responsibilities
+Responsibility	What it does
+Quantum resource estimation	Estimates qubits, gates, two-qubit gates and circuit depth
+Shot estimation	Estimates required shots using Equation 10
+Classical resource estimation	Records CPU time and memory requirements
+Resource constraint checking	Compares estimated requirements with configured limits
+QPU utilization	Calculates utilization when busy and available times are observable
+
+B. Equations used
+Equation 10 — Required shots
+\[
+N_{\mathrm{required}}\approx
+\left\lceil
+\frac{z_{\alpha/2}^{2}\hat{\sigma}^{2}}
+{\epsilon_{\mu}^{2}}
+\right\rceil
+\]
+
+Estimates the number of shots required for a target statistical precision.
+
+Equation 18 — Resource constraints
+\[
+N_{\mathrm{shots}}\leq N_{\max}
+\]
+
+Checks whether the requested or estimated shot requirement exceeds the configured limit. The complete optimization problem belongs to RuntimePolicy.
+
+Equation 31 — QPU utilization
+\[
+U_{\mathrm{QPU}}=
+\frac{T_{\mathrm{QPU,busy}}}
+{T_{\mathrm{QPU,available}}}
+\]
+
+Calculates observable QPU utilization.
+C. Input and output
+Input
+- CircuitProfile or WorkloadProfile
+- Shots per circuit
+- Observable variance and target precision
+- Backend or experiment resource limits
+- Optional CPU time and memory measurements
+
+Output: ResourceProfile
+- quantum: quantum resource requirements
+- classical: classical resource requirements
+- limits: configured limits
+- violations: resource-limit violations
+- feasible: whether checked limits were satisfied
+- qpu_utilization: optional utilization measurement
+
+D. Important boundaries
+ResourceProfiler does not:
+- Submit quantum jobs.
+- Allocate QPU resources.
+- Select a backend.
+- Increase shots automatically.
+- Make quantum-versus-classical decisions.
+- Predict application quality.
+Those responsibilities belong to other QFlowPilot components.
+
+2. Complete status of the seven profiler modules
+Your profiler architecture now contains all seven modules:
+No.	Module	Main responsibility
+1	circuit_profiler.py	Individual circuit characterization
+2	workload_profiler.py	Batch and iterative workload characterization
+3	transpilation_profiler.py	Compilation and backend-specific circuit analysis
+4	quality_profiler.py	Measurement and application quality
+5	latency_profiler.py	Execution and workload latency
+6	cost_estimator.py	Quantum, classical and communication cost
+7	resource_profiler.py	Resource requirements and constraints
+
+The next task is not to create another profiler. It is to validate that these modules exchange compatible information.
+
+3. Validate ResourceProfiler independently
+First, run the ResourceProfiler tests.
+
+From PowerShell:
+cd "C:\Users\Aleem Raza\Desktop\QFlowPilot"
+
+python -m pytest tests/test_resource_profiler.py -v
+
+
+Then run the example:
+python -m examples.test_resource_profiler
+
+
+Also check that all seven modules can be imported:
+python -c "from qflowpilot.profiler.circuit_profiler import CircuitProfiler; from qflowpilot.profiler.workload_profi
+
+
+The execution flow will be:
+1. Build the quantum circuits and define a batch or iterative workload.
+2. Profile the circuits and workload.
+3. Run transpilation profiling.
+4. Execute the circuits through the Core Adapter with IDEAL_SIMULATOR.
+5. Use the returned ExecutionResult objects for quality, latency, and cost profiling.
+6. Estimate the workload's resource requirements.
+7. Print a combined report and check that the seven profilers completed.
